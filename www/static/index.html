@@ -1,0 +1,61 @@
+{{define "page"}}
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{.Title}}</title>
+        {{ template "Resources"}}
+        {{ template "JS"}}
+    </head>
+
+    <body>
+    <div class="uk-container">
+    <h1>{{.Title}}</h1>
+    <a class="uk-button uk-button-default" href="/add">Add post</a>
+    <div class="uk-column-1-2 uk-column-divider" style="margin: 10px">
+        {{ range $key, $value := .Blocks }}
+        <blockquote cite="#" class="uk-column-span">
+            <p>{{$value.Title}}</p>
+            <p>{{$value.Text}}</p>
+            <footer><cite><a href="change/{{$value.Id}}">change article </a></cite></footer>
+        </blockquote>
+
+        {{ end }}
+   </div>
+   </div>
+    </body>
+
+    </html>
+{{ end }}
+
+
+
+{{ define "JS" }}
+    <script>
+        window.onload = async () =>{
+            let checkBoxes = document.querySelectorAll('input')
+            for (checkBox of checkBoxes){
+                checkBox.onclick = async function() {
+                    let taskID = this.getAttribute('task-id')
+                    let taskCompleted = this.checked
+
+                    let resp = await fetch(`${taskID}/${taskCompleted}`, {method: "POST"})
+                    let data = await resp.json()
+                    console.log(data)
+                    window.location.reload()
+                }
+            }
+        }
+    </script>
+
+{{ end }}
+
+
+{{ define "Resources"}}
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.4.1/dist/css/uikit.min.css" />
+
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.4.1/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.4.1/dist/js/uikit-icons.min.js"></script>
+{{ end }}

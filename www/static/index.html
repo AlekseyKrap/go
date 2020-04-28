@@ -3,39 +3,109 @@
     <html>
     <head>
         <meta charset="utf-8">
-        <title>{{.Title}}</title>
+        <title>Blog</title>
+        {{ template "Resources"}}
+        {{ template "JS"}}
+    </head>
+
+    <body>
+
+    <div class="uk-container">
+        <h1>Blog</h1>
+        <a class="uk-button uk-button-default" href="/add">Add post</a>
+        <div class="uk-column-1-2 uk-column-divider" style="margin: 10px">
+            {{ range $key, $value := .Posts }}
+                <blockquote cite="#" class="uk-column-span">
+                    <p>{{$value.Title}}</p>
+                    <p>{{$value.Text}}</p>
+                    <footer>
+                        <cite><a href="change/{{$value.ID}}">change article </a></cite><br/>
+                        <cite>create {{$value.Created_at}}</cite><br/>
+                        <cite>updated {{$value.Updated_at}}</cite><br/>
+                    </footer>
+                </blockquote>
+
+            {{ end }}
+        </div>
+    </div>
+
+    </body>
+    </html>
+{{ end }}
+
+
+{{define "pageADD"}}
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>ADD</title>
         {{ template "Resources"}}
         {{ template "JS"}}
     </head>
 
     <body>
     <div class="uk-container">
-    <h1>{{.Title}}</h1>
-    <a class="uk-button uk-button-default" href="/add">Add post</a>
-    <div class="uk-column-1-2 uk-column-divider" style="margin: 10px">
-        {{ range $key, $value := .Blocks }}
-        <blockquote cite="#" class="uk-column-span">
-            <p>{{$value.Title}}</p>
-            <p>{{$value.Text}}</p>
-            <footer><cite><a href="change/{{$value.Id}}">change article </a></cite></footer>
-        </blockquote>
+        <h1>Add post</h1>
+        <form action="/newPost" method="POST" >
+            <fieldset class="uk-fieldset">
 
-        {{ end }}
-   </div>
-   </div>
+                <div class="uk-margin">
+                    <input class="uk-input" name="Title" type="text" placeholder="Title">
+                </div>
+                <div class="uk-margin">
+                    <textarea class="uk-textarea" name="Text" rows="5" placeholder="Text"></textarea>
+                </div>
+                <input type="hidden" name="Token" value="{{.Token}}">
+                <button class="uk-button uk-button-default">Submit</button>
+            </fieldset>
+
+        </form>
+    </div>
     </body>
-
     </html>
-{{ end }}
+{{end}}
 
+{{define "pageChange"}}
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Change</title>
+        {{ template "Resources"}}
+        {{ template "JS"}}
+    </head>
+
+    <body>
+    <div class="uk-container">
+        <h1>Change post</h1>
+        <form action="/changePost" method="POST" >
+            <fieldset class="uk-fieldset">
+
+                <div class="uk-margin">
+                    <input class="uk-input" name="Title" type="text" value="{{.Posts.Title}}" placeholder="Title">
+                </div>
+                <div class="uk-margin">
+                    <textarea class="uk-textarea" name="Text"  rows="5" placeholder="Text">{{.Posts.Text}}</textarea>
+                </div>
+                <input type="hidden" name="Token" value="{{.Token}}"/>
+                <input type="hidden" name="ID" value="{{.Posts.ID}}"/>
+                <button class="uk-button uk-button-default">Submit</button>
+            </fieldset>
+
+        </form>
+    </div>
+    </body>
+    </html>
+{{end}}
 
 
 {{ define "JS" }}
     <script>
-        window.onload = async () =>{
+        window.onload = async () => {
             let checkBoxes = document.querySelectorAll('input')
-            for (checkBox of checkBoxes){
-                checkBox.onclick = async function() {
+            for (checkBox of checkBoxes) {
+                checkBox.onclick = async function () {
                     let taskID = this.getAttribute('task-id')
                     let taskCompleted = this.checked
 
@@ -53,7 +123,7 @@
 
 {{ define "Resources"}}
     <!-- UIkit CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.4.1/dist/css/uikit.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.4.1/dist/css/uikit.min.css"/>
 
     <!-- UIkit JS -->
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.4.1/dist/js/uikit.min.js"></script>

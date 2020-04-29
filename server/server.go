@@ -1,7 +1,7 @@
 package server
 
 import (
-	"../models"
+	"../my_models"
 	"database/sql"
 	"encoding/json"
 	"github.com/go-chi/chi/middleware"
@@ -18,8 +18,8 @@ type Server struct {
 	rootDir       string
 	templatesDir  string
 	indexTemplate string
-	Page          models.Page
-	Post          models.Post
+	Page          my_models.Page
+	Post          my_models.Post
 }
 
 // New - создаёт новый экземпляр сервера
@@ -30,8 +30,8 @@ func New(lg *logrus.Logger, rootDir string, db *sql.DB) *Server {
 		rootDir:       rootDir,
 		templatesDir:  "/static",
 		indexTemplate: "/index.html",
-		Page: models.Page{
-			Posts: models.PostItemSlice{
+		Page: my_models.Page{
+			Posts: my_models.PostItemSlice{
 				//{ID: "0", Text: "123", Completed: false},
 				//{ID: "1", Text: "test", Completed: true},
 				//{ID: "2", Text: "test 2", Completed: false},
@@ -59,7 +59,7 @@ func (serv *Server) Start(addr string) error {
 func (serv *Server) SendErr(w http.ResponseWriter, err error, code int, obj ...interface{}) {
 	serv.lg.WithField("data", obj).WithError(err).Error("server error")
 	w.WriteHeader(code)
-	errModel := models.ErrorModel{
+	errModel := my_models.ErrorModel{
 		Code:     code,
 		Err:      err.Error(),
 		Desc:     "server error",

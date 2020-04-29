@@ -1,4 +1,4 @@
-package models
+package my_models
 
 // ErrorModel - Ошибка отвечаемая сервером
 type ErrorModel struct {

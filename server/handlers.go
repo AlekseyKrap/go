@@ -1,7 +1,7 @@
 package server
 
 import (
-	"../models"
+	"../my_models"
 	"crypto/md5"
 	"errors"
 	"fmt"
@@ -42,7 +42,7 @@ func (serv *Server) getTemplateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	posts, err := models.GetAllTaskItems(serv.db)
+	posts, err := my_models.GetAllTaskItems(serv.db)
 	if err != nil {
 		serv.SendInternalErr(w, err)
 		return
@@ -111,7 +111,7 @@ func (serv *Server) postNewPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	post := models.PostItem{Text: r.Form["Text"][0], Title: r.Form["Title"][0]}
+	post := my_models.PostItem{Text: r.Form["Text"][0], Title: r.Form["Title"][0]}
 
 	if err := post.Insert(serv.db); err != nil {
 		serv.SendInternalErr(w, err)
@@ -130,7 +130,7 @@ func (serv *Server) postNewPost(w http.ResponseWriter, r *http.Request) {
 func (serv *Server) changeGet(w http.ResponseWriter, r *http.Request) {
 	postId := chi.URLParam(r, "id")
 
-	post, err := models.GetPost(serv.db, postId)
+	post, err := my_models.GetPost(serv.db, postId)
 	if err != nil {
 		serv.SendInternalErr(w, err)
 		return
@@ -199,7 +199,7 @@ func (serv *Server) postChangePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	post := models.PostItem{Text: r.Form["Text"][0], Title: r.Form["Title"][0], ID: r.Form["ID"][0]}
+	post := my_models.PostItem{Text: r.Form["Text"][0], Title: r.Form["Title"][0], ID: r.Form["ID"][0]}
 
 	if err := post.Update(serv.db); err != nil {
 		serv.SendInternalErr(w, err)

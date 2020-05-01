@@ -1,4 +1,4 @@
-package my_models
+package models
 
 // Page - страница доступная шаблонизатору
 type Page struct {

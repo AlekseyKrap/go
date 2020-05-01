@@ -17,11 +17,9 @@
             {{ range $key, $value := .Posts }}
                 <blockquote cite="#" class="uk-column-span">
                     <p>{{$value.Title}}</p>
-                    <p>{{$value.Text}}</p>
+                    <p>{{$value.Desc}}</p>
                     <footer>
-                        <cite><a href="change/{{$value.ID}}">change article </a></cite><br/>
-                        <cite>create {{$value.Created_at}}</cite><br/>
-                        <cite>updated {{$value.Updated_at}}</cite><br/>
+                        <cite><a href="change/{{$value.Key}}">change article </a></cite><br/>
                     </footer>
                 </blockquote>
 
@@ -54,7 +52,7 @@
                     <input class="uk-input" name="Title" type="text" placeholder="Title">
                 </div>
                 <div class="uk-margin">
-                    <textarea class="uk-textarea" name="Text" rows="5" placeholder="Text"></textarea>
+                    <textarea class="uk-textarea" name="Desc" rows="5" placeholder="Text"></textarea>
                 </div>
                 <input type="hidden" name="Token" value="{{.Token}}">
                 <button class="uk-button uk-button-default">Submit</button>
@@ -86,10 +84,10 @@
                     <input class="uk-input" name="Title" type="text" value="{{.Posts.Title}}" placeholder="Title">
                 </div>
                 <div class="uk-margin">
-                    <textarea class="uk-textarea" name="Text"  rows="5" placeholder="Text">{{.Posts.Text}}</textarea>
+                    <textarea class="uk-textarea" name="Desc"  rows="5" placeholder="Text">{{.Posts.Desc}}</textarea>
                 </div>
                 <input type="hidden" name="Token" value="{{.Token}}"/>
-                <input type="hidden" name="ID" value="{{.Posts.ID}}"/>
+                <input type="hidden" name="ID" value="{{.Posts.Key}}"/>
                 <button class="uk-button uk-button-default">Submit</button>
             </fieldset>
 

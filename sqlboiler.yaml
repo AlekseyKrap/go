@@ -1,6 +1,0 @@
-mysql:
-  dbname: "blogdb"
-  user: "root"
-  pass: "root"
-  host: "localhost"
-  sslmode: "false"

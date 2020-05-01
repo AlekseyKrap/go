@@ -1,10 +1,10 @@
 package server
 
 import (
-	"../my_models"
-	"database/sql"
+	"../models"
 	"encoding/json"
 	"github.com/go-chi/chi/middleware"
+	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -14,28 +14,24 @@ import (
 // Server - объект сервера
 type Server struct {
 	lg            *logrus.Logger
-	db            *sql.DB
+	db            *mongo.Database
 	rootDir       string
 	templatesDir  string
 	indexTemplate string
-	Page          my_models.Page
-	Post          my_models.Post
+	Page          models.Page
+	Post          models.Post
 }
 
 // New - создаёт новый экземпляр сервера
-func New(lg *logrus.Logger, rootDir string, db *sql.DB) *Server {
+func New(lg *logrus.Logger, rootDir string, db *mongo.Database) *Server {
 	return &Server{
 		lg:            lg,
 		db:            db,
 		rootDir:       rootDir,
 		templatesDir:  "/static",
 		indexTemplate: "/index.html",
-		Page: my_models.Page{
-			Posts: my_models.PostItemSlice{
-				//{ID: "0", Text: "123", Completed: false},
-				//{ID: "1", Text: "test", Completed: true},
-				//{ID: "2", Text: "test 2", Completed: false},
-			},
+		Page: models.Page{
+			Posts: models.PostItemSlice{},
 		},
 	}
 }
@@ -59,7 +55,7 @@ func (serv *Server) Start(addr string) error {
 func (serv *Server) SendErr(w http.ResponseWriter, err error, code int, obj ...interface{}) {
 	serv.lg.WithField("data", obj).WithError(err).Error("server error")
 	w.WriteHeader(code)
-	errModel := my_models.ErrorModel{
+	errModel := models.ErrorModel{
 		Code:     code,
 		Err:      err.Error(),
 		Desc:     "server error",
